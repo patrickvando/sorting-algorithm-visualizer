@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <title>Sorting Algorithm Visualizer</title>
+  </head>
+  <body>
+	<div class = "row">
+	<button type="button" class="btn btn-primary" onclick="randomizeButton()">Randomize</button>
+	<button type="button" class="btn btn-primary" onclick="mergeSortButton()">MergeSort</button>
+	<button type="button" class="btn btn-primary" onclick="quickSortButton()">QuickSort</button>
+
+	</div>
+	<div class = "row">
+	<canvas id="myCanvas" width="1600" height="800" style="border:1px solid #d3d3d3;">
+	</div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+
+<script>
+//ideas - try to make it work with really large numbers?
+//that would improve the visualization aspect...
+//concurrent frame update stuff - wait until the frame is updated? but if i call fillrect and ctx draw i think it will wait anyways, so maybe this isn't so hard. 
+//grey out buttons
+//put in heap sort, , also put in insertion sort, label buttons as "efficient" algorithms and inefficent algorithms
+var canvas = document.getElementById('myCanvas');
+var ctx = canvas.getContext('2d');
+
+var arr = [];
+var arr_length = 50;
+var frames = [];
+var currentFrame = 0;
+var id;
+
+//colors
+var sorted_color = [0, 0, 255];
+var comparison_color = [0, 255, 0];
+var original_color = [255, 0, 0];
+
+
+init();
+
+function init(){
+   randomizeIntervalArray();
+   //arr = [[3, 255, 0, 0], [1, 255, 0, 0], [5, 255, 0, 0], [9, 255, 0, 0], [2, 255, 0, 0], [4, 255, 0, 0]];
+   addFrame();
+   renderFrame();
+}
+
+function randomizeButton(){
+    clearFrames();
+    clearInterval(id);
+    //anonymous method??? put in later
+    randomizeIntervalArray();
+    addFrame();
+    renderFrame();
+}
+
+function mergeSortButton(){
+    //what does this do if mergesort takes so long?
+    //need a way to lock? out current frame? what happens when auser presses the mergesortubton while the quicksort button is running?
+    clearFrames();
+    clearInterval(id);
+    mergeSort();
+    id = setInterval(animate, 20);
+}
+
+function quickSortButton(){
+    //add animation to quicksort
+    clearInterval(id);
+    quickSort();
+    id = setInterval(animate, 20);
+}
+
+function randomizeIntervalArray(){
+    arr = new Array(arr_length);
+    max_num = arr_length;
+    for (var k = 0; k < arr.length; k++){
+        arr[k] = [1 + Math.floor(Math.random() * max_num), 255, 0, 0];
+    }
+
+}
+
+function randomizeConsecutiveArray(){
+    arr = new Array(arr_length); 
+
+    for (var k = 0; k < arr.length; k++){
+        arr[k] = [k + 1, 255, 0, 0];
+    }
+
+    for (var k = arr.length - 1; k >= 0; k--){
+        j = Math.floor(Math.random() * k);
+        var tmp = arr[k]
+        arr[k] = arr[j]
+        arr[j] = tmp
+    }
+}
+
+function printArray(){
+    var st = "";
+    for (var k = 0; k < arr.length; k++){
+        st += arr[k][0] + "," 
+    }
+}
+
+function renderFrame(){
+    var frame = frames[currentFrame];
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+    var xOffset = 50;
+    var yOffset = 50;
+    var bar_dist = 10;
+    var bar_blocksize = 10;
+    var letter_size = 10;
+    for(var k = 0; k < frame.length; k++){
+        ctx.fillStyle = `rgb(${frame[k][1]}, ${frame[k][2]}, ${frame[k][3]})`;
+        ctx.fillRect(xOffset + k *(bar_dist + bar_blocksize), yOffset, bar_blocksize, bar_blocksize * frame[k][0]);
+        ctx.fillStyle = "black";
+        ctx.font = `${letter_size}px Arial`;
+        ctx.fillText(frame[k][0], xOffset + k * (bar_dist + bar_blocksize), yOffset + letter_size + bar_blocksize * frame[k][0]);
+    }
+}
+
+function mergeSort(){
+    function recurse(start, end){ 
+        if (start == end){
+            return;
+        }
+        var middle = Math.floor((start + end) / 2);
+        recurse(start, middle);
+        recurse(middle + 1, end);
+        var left = Array(middle - start + 1);
+        var right = Array(end - middle);
+        for(var k = 0; k < left.length; k++){
+            left[k] = arr[start + k];
+        }
+        for(var k = 0; k < right.length; k++){
+            right[k] = arr[middle + 1 + k];
+        }
+        i = 0;
+        j = 0;
+        for(var k = start; k <= end; k++){
+            if (j < right.length && (i == left.length || left[i][0] > right[j][0])){
+                arr[k] = right[j];
+                j++;
+            } else {
+                arr[k] = left[i];
+                i++;
+            }
+            addFrame();
+        }
+    }
+    recurse(0, arr.length - 1);
+}
+
+function quickSort(){
+    function recurse(start, end){
+        if(start >= end){
+            return;
+        }
+        var pivot = arr[end];
+        var j = start;
+        for(var k = start; k < end; k++){  
+            if (arr[k][0] < pivot[0]){
+                var tmp = arr[k];
+                arr[k] = arr[j];
+                arr[j] = tmp;
+                j += 1;
+                addFrame();
+            }
+        }
+        arr[end] = arr[j];
+        arr[j] = pivot;
+        recurse(start, j - 1);
+        recurse(j + 1, end);
+    }
+
+    recurse(0, arr.length - 1);
+}
+
+function addFrame(){
+    var frame = Array(arr.length);
+    for(var k = 0; k < arr.length; k++){
+        frame[k] = arr[k].slice();
+    }
+    frames.push(frame);
+}
+
+function clearFrames(){
+    currentFrame = 0;
+    frames = []
+}
+
+function animate(){
+    if(currentFrame == frames.length){
+        clearInterval(id);
+    } else {
+        renderFrame();
+        currentFrame += 1;
+    }
+}
+
+</script>
+</body>
+</html>
