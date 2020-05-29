@@ -9,7 +9,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-    <script src="test.js"></script>
+    <script src="utilities.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href='style.css' %}">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -32,38 +32,169 @@
         </div>  
     </div>
     <div class = "row w-100 m-0 d-flex justify-content-center align-items-center" style="max-height:60%;">
-        <canvas id="myCanvas" width="1000" height="700" style="border:1px solid #000000;">
+        <canvas id="canvas" width="1400" height="700" style="border:1px solid #000000;">
         </canvas>
     </div> 
     <div class = "row w-100 d-flex justify-content-center align-items-center m-0"  style="max-height:20%;">
         <div class = "col-3">
         </div>
         <div class = "col-2 d-flex justify-content-center align-items-center">
-            <button type="button" class="btn btn-primary m-1">Randomize</button>
+            <button type="button" class="btn btn-primary m-1" id="randomize_button">Randomize</button>
         </div>
         <div class = "col-2 d-flex justify-content-center align-items-center">
-            <button type="button" class="btn btn-primary m-1 material-icons">fast_rewind</button>            
-            <button type="button" class="btn btn-primary m-1 material-icons">skip_previous</button>            
-            <button type="button" class="btn btn-primary m-1 material-icons">play_arrow</button>
-            <button type="button" class="btn btn-primary m-1 material-icons">skip_next</button>
-            <button type="button" class="btn btn-primary m-1 material-icons">fast_forward</button>
+            <button type="button" class="btn btn-primary m-1 material-icons" id="goto_beginning_button">fast_rewind</button>            
+            <button type="button" class="btn btn-primary m-1 material-icons" id="step_backward_button">skip_previous</button>            
+            <button type="button" class="btn btn-primary m-1 material-icons" id="play_button">play_arrow</button>
+            <button type="button" class="btn btn-primary m-1 material-icons" id="step_forward_button">skip_next</button>
+            <button type="button" class="btn btn-primary m-1 material-icons" id="goto_end_button">fast_forward</button>
         </div>
         <div class = "col-2 h-100 d-flex justify-content-center align-items-center">
             <div class = "m-2">
                 Speed
             </div>
             <div class = "m-2">
-                <select class="custom-select">
-                    <option value="0.25">0.25x</option>
-                    <option value="0.5">0.5x</option>
-                    <option selected value="1">1x</option>
-                    <option value="1.5">1.5x</option>
-                    <option value="2">2x</option>
+                <select class="custom-select" id="speed_dropdown">
+                    <option value=0.25>0.25x</option>
+                    <option value=0.5>0.5x</option>
+                    <option selected value=1>1x</option>
+                    <option value=1.5>1.5x</option>
+                    <option value=2>2x</option>
                 </select>
             </div>
         </div>
         <div class = "col-3">
         </div>
     </div>                                   
-</div>       
+</div>
+<script>
+var frames = [];
+var current_frame = -1;
+var is_paused = true;
+var play_interval = null;
+var speed = 100;
+
+var max_value = 99;
+var min_value = 0;
+var original_array_length = 60;
+var original_array = null;
+
+function init(){
+    run_algorithm("default");
+    display_current_frame();
+}
+
+function run_algorithm(alg_name){
+    if (alg_name == "quicksort"){
+
+    } else {
+        frames = []
+        for(var k = 0; k < original_array_length; k++){
+            randomize_original_array();
+            frames.push(copy_array(original_array));        
+        }
+    }
+}
+
+function randomize_original_array(){
+    original_array = [];
+    for(var k = 0; k < original_array_length; k++){
+        value = Math.floor(Math.random() * (max_value+ 1)) + min_value;
+        original_array.push([value, 255, 0, 0]);
+    }
+}
+
+function play(){
+    if (is_paused){
+        is_paused = false;
+        current_frame += 1;
+        display_current_frame()
+        play_interval = setInterval(function(){
+            current_frame += 1;
+            display_current_frame()
+        }, speed);
+        $("#play_button").html("pause");
+    }
+}
+
+function pause(){
+    if (!is_paused){
+        is_paused = true;
+        clearInterval(play_interval);
+        $("#play_button").html("play_arrow");        
+    }
+}
+
+function display_current_frame(){
+    current_frame = Math.max(0, current_frame);
+    current_frame = Math.min(current_frame, frames.length - 1);
+    display_frame(frames[current_frame]);
+}
+
+function display_frame(frame){
+    var c = $("#canvas").get(0);
+    var ctx = c.getContext("2d");
+    ctx.clearRect(0, 0, c.width, c.height);
+    var start_x = 10;
+    var start_y = 50;
+    var bar_width = 10;
+    var bar_spacing = 10;
+    var font_size = 15;
+    for(var k = 0; k < frame.length; k++){
+        var val, r, g, b;
+        [val, r, g, b] = frame[k];
+        ctx.beginPath();
+        ctx.fillStyle = "rgba(" + r + "," + g + "," + b + ")";
+        ctx.fillRect(start_x + (bar_width + bar_spacing) * k, c.height - start_y, bar_width, -val);
+        ctx.font = font_size + 'px serif';
+        ctx.fillText(val, start_x + (bar_width + bar_spacing) * k, c.height - start_y + font_size);
+        ctx.stroke();
+    }
+}
+init();
+
+$("#play_button").click(function(){
+    if (is_paused){
+        play();
+    } else {
+        pause();
+    }
+});
+
+$("#step_forward_button").click(function(){
+    pause();
+    current_frame += 1;
+    display_current_frame();
+});
+
+$("#step_backward_button").click(function(){
+    pause();
+    current_frame -= 1;
+    display_current_frame();
+});
+
+$("#goto_beginning_button").click(function(){
+    pause();
+    current_frame = 0;
+    display_current_frame();    
+});
+
+$("#goto_end_button").click(function(){
+    pause();
+    current_frame = frames.length;
+    display_current_frame(); 
+});
+
+$("#randomize_button").click(function(){
+    pause();
+    randomize_original_array();
+    run_algorithm();
+    current_frame = 0;
+    display_current_frame();
+});
+
+$("#speed_dropdown").change(function(){
+    speed = 100 / $(this).children("option:selected").attr("value");
+    console.log(speed);
+});
+</script>       
 </body>
