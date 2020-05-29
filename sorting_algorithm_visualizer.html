@@ -1,376 +1,69 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <!-- Required meta tags -->
+<!DOCTYPE html>
+<html lang="en" class="h-100 w-100">
+<head>
+    <title>Sort Visualizer</title>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Bootstrap CSS -->
-	<link href="assets/style.css" rel="stylesheet">
-	<link href="assets/lux_bootstrap.min.css" rel="stylesheet">
-
-    <title>Sorting Algorithm Visualizer</title>
-  </head>
-  <body>
-
-	<div class="container mt-3">
-    	<div class = "d-flex justify-content-start bg-secondary mb-3">
-        	<div class="p-2">
-        		<button type="button" class="btn btn-primary shadow-lg" onclick="randomizeButton()">Randomize</button>
-	        </div>
-    
-        	<div class="p-2">
-        		<button type="button" class="btn btn-primary shadow-lg" onclick="resetButton()">Reset</button>
-        	</div>
-        	<div class="p-2 ml-auto">
-        		<button type="button" class="btn btn-primary shadow-lg" onclick="mergeSortButton()">MergeSort</button>
-        	</div>
-        	<div class="p-2">
-        		<button type="button" class="btn btn-primary shadow-lg" onclick="quickSortButton()">QuickSort</button>
-        	</div>
-        	<div class="p-2">
-        		<button type="button" class="btn btn-primary shadow-lg" onclick="heapSortButton()">HeapSort</button>
-        
-        	</div>
-   		</div> 
-    	<div class="d-flex justify-content-center"> 
-    		<canvas id="myCanvas" width="1600" height="800">
-    	</div>
-	</div>
-
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-
-
-<script>
-
-
-
-class Queue{
-    constructor(){
-        this.head = null;
-        this.tail = null;
-    }
-
-    pop(){
-        if(this.head == null){
-            return null;
-        }
-        var result = this.head.value;
-        this.head = this.head.next;
-        if(this.head == null){
-            this.tail = null;
-        }
-        return result;
-    }
-
-    append(value){
-        if(this.head == null){
-            this.head = new Node(value);
-            this.tail = this.head;
-        } else {
-            this.tail.next = new Node(value);
-            this.tail = this.tail.next;
-        }
-    }
-
-    empty(){
-        this.head = null;
-        this.tail = null;
-    }
-}
-
-class Node{
-    constructor(value){
-        this.value = value;
-        this.next = null;
-    }
-}
-
-//USE THE SAME RANDOMIZED PATTERN EACH TIME - UNLESS RANDOMIZED BUTTON IS CLICKED - SO THAT YOU CAN SEE HOW IT WAS SUPPOSED TO START
-//ADD RESET BUTTON? -> group randomize and reset together 
-
-//ideas - try to make it work with really large numbers?
-//that would improve the visualization aspect...
-//concurrent frame update stuff - wait until the frame is updated? but if i call fillrect and ctx draw i think it will wait anyways, so maybe this isn't so hard. 
-//grey out buttons
-//put in heap sort, , also put in insertion sort, label buttons as "efficient" algorithms and inefficent algorithms
-var canvas = document.getElementById('myCanvas');
-var ctx = canvas.getContext('2d');
-
-var initial_arr = [];
-var arr = [];
-var arr_length = 100;
-var frames = new Queue();
-
-//colors
-var sorted_color = [0, 0, 255];
-var comparison_color = [0, 255, 0];
-var original_color = [0, 0, 0];
-
-
-init();
-
-function init(){
-   randomizeIntervalArray();
-   addFrame();
-   setInterval(animate, 20);
-
-
-}
-
-function reset(){
-    frames.empty();
-    arr = copyArray(initial_arr);
-    addFrame();
-}
-
-function randomizeButton(){
-    randomizeIntervalArray();
-    addFrame();
-}
-
-function resetButton(){
-    reset();
-}
-
-function mergeSortButton(){
-    reset();
-    mergeSort();
-}
-//QUICKSORT IS BROKEN!!!!!!!!!
-function quickSortButton(){
-    reset();
-    quickSort();
-}
-
-function heapSortButton(){
-    reset();
-    heapSort();
-}
-
-function randomizeIntervalArray(){
-    arr = new Array(arr_length);
-    max_num = arr_length;
-    for (var k = 0; k < arr.length; k++){
-        arr[k] = [1 + Math.floor(Math.random() * max_num)].concat(original_color);
-    }
-    initial_arr = copyArray(arr);
-}
-
-
-function randomizeConsecutiveArray(){
-    arr = new Array(arr_length); 
-
-    for (var k = 0; k < arr.length; k++){
-        arr[k] = [k + 1, 255, 0, 0];
-    }
-
-    for (var k = arr.length - 1; k >= 0; k--){
-        j = Math.floor(Math.random() * k);
-        var tmp = arr[k]
-        arr[k] = arr[j]
-        arr[j] = tmp
-    }
-    initial_arr = copyArray(arr);
-}
-
-function printArray(){
-    var st = "";
-    for (var k = 0; k < arr.length; k++){
-        st += arr[k][0] + "," 
-    }
-    return st;
-}
-
-function renderFrame(frame){
-	ctx.clearRect(0, 0, canvas.width, canvas.height);
-    var xOffset = 50;
-    var yOffset = 50;
-    var bar_dist = 7;
-    var bar_blocksize = 7;
-    var letter_size = 10;
-    for(var k = 0; k < frame.length; k++){
-        ctx.fillStyle = `rgb(${frame[k][1]}, ${frame[k][2]}, ${frame[k][3]})`;
-        ctx.fillRect(xOffset + k *(bar_dist + bar_blocksize), canvas.height - yOffset, bar_blocksize, -bar_blocksize * frame[k][0]);
-
-
-        ctx.fillStyle = "black";
-
-//		ctx.shadowColor = '#898';
-//		ctx.shadowBlur = 20;
-//		ctx.shadowOffsetX = 20;
-//		ctx.shadowOffsetY = 20;
-
-        ctx.font = `${letter_size}px Arial`;
-        ctx.fillText(frame[k][0], xOffset + k * (bar_dist + bar_blocksize), canvas.height - (yOffset + letter_size + bar_blocksize * frame[k][0]));
-        
-    }
-}
-
-function mergeSort(){
-    function recurse(start, end){ 
-        if (start == end){
-            return;
-        }
-        var middle = Math.floor((start + end) / 2);
-        recurse(start, middle);
-        recurse(middle + 1, end);
-        var left = Array(middle - start + 1);
-        var right = Array(end - middle);
-        for(var k = 0; k < left.length; k++){
-            left[k] = arr[start + k];
-        }
-        for(var k = 0; k < right.length; k++){
-            right[k] = arr[middle + 1 + k];
-        }
-        i = 0;
-        j = 0;
-        for(var k = start; k <= end; k++){
-            if (j < right.length && (i == left.length || left[i][0] > right[j][0])){
-                arr[k] = right[j];
-                j++;
-            } else {
-                arr[k] = left[i];
-                i++;
-            }
-            addFrame();
-        }
-    }
-    recurse(0, arr.length - 1);
-}
-
-function quickSort(){
-    function recurse(start, end){
-        if(start >= end){
-            return;
-        }
-        var pivot = arr[end];
-        var j = start;
-        for(var k = start; k < end; k++){  
-            if (arr[k][0] < pivot[0]){
-                var tmp = arr[k];
-                arr[k] = arr[j];
-                arr[j] = tmp;
-                j += 1;
-                addFrame();
-            }
-        }
-        arr[end] = arr[j];
-        arr[j] = pivot;
-        addFrame();
-        recurse(start, j - 1);
-        recurse(j + 1, end);
-    }
-
-    recurse(0, arr.length - 1);
-}
-
-function heapSort(){
-    var size = 0
-    function insert(value){
-        var current = size;
-        //expand the array behind the heap if it is full
-        if (size < arr.length){
-            arr[current] = value;
-        } else {
-            arr.push(value);
-        }
-        size += 1;
-        if (size == 1){
-            return;
-        }
-
-        //sift up
-        parent = Math.floor(Math.abs((current - .5)) / 2);
-        while (arr[current][0] > arr[parent][0]){
-            var temp = arr[current];
-            arr[current] = arr[parent];
-            arr[parent] = temp;
-            current = parent;
-            parent = Math.floor(Math.abs((current - .5)) / 2);
-        }
-    }
-
-    function extract(){
-        //return null if the heap is empty
-        if (size == 0){
-            return null; 
-        }
-
-        var res = arr[0];
-        size -= 1;
-        if (size == 0){
-            return res;
-        }
-
-        //sift down
-        var current = 0
-        arr[current] = arr[size];
-        var child1 = (current + 0.5) * 2;
-        var child2 = (current + 0.5) * 2 + 1;
-        var c1bigger = (child1 < size && arr[current][0] < arr[child1][0]);
-        var c2bigger = (child2 < size && arr[current][0] < arr[child2][0]);
-        var counter = 0
-        while ((c1bigger || c2bigger) && counter < 20){
-            counter += 1;
-            if (child2 < size && arr[child1][0] < arr[child2][0]){
-                var tmp = arr[current];
-                arr[current] = arr[child2];
-                arr[child2] = tmp;
-                current = child2;
-            } else {
-                var tmp = arr[current];
-                arr[current] = arr[child1];
-                arr[child1] = tmp;
-                current = child1;
-            }
-            child1 = (current + 0.5) * 2;
-            child2 = (current + 0.5) * 2 + 1;
-            c1bigger = (child1 < size && arr[current][0] < arr[child1][0]);
-            c2bigger = (child2 < size && arr[current][0] < arr[child2][0]);
-        }
-        return res;
-    }
-
-    //make the heap
-    for (var k = 0; k < arr.length; k++){
-        addFrame();
-        insert(arr[k]);
-    }
-
-    //extract from the heap one at a time
-    for(var k = arr.length - 1; k >= 0; k--){
-        addFrame();
-        arr[k] = extract(arr[k]);
-    }
-}
-
-function copyArray(color_arr){
-    var copy = Array(color_arr.length);
-    for(var k = 0; k < color_arr.length; k++){
-        copy[k] = color_arr[k].slice();
-    }
-    return copy
-}
-
-function addFrame(){
-    frames.append(copyArray(arr));
-}
-
-
-function animate(){
-    var currentFrame = frames.pop()
-    if(currentFrame != null){
-        renderFrame(currentFrame);
-    }
-}
-
-
-
-</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <script src="test.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href='style.css' %}">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body class="h-100 w-100"> 
+<div class="container-fluid row w-100 m-0">
+    <div class = "row w-100 m-0 d-flex justify-content-center align-items-center" style="max-height:20%;">
+        <div class = "col">
+            <div class = "row d-flex justify-content-center align-items-center m-2">
+                Sort Visualizer
+            </div>
+            <div class = "row d-flex justify-content-center align-items-center m-2">
+                <button type="button" class="btn btn-primary m-1">Quick Sort</button>            
+                <button type="button" class="btn btn-primary m-1">Merge Sort</button>            
+                <button type="button" class="btn btn-primary m-1">Heap Sort</button>
+                <button type="button" class="btn btn-primary m-1">Selection Sort</button>
+                <button type="button" class="btn btn-primary m-1">Insertion Sort</button>
+                <button type="button" class="btn btn-primary m-1">Bubble Sort</button>  
+            </div>
+        </div>  
+    </div>
+    <div class = "row w-100 m-0 d-flex justify-content-center align-items-center" style="max-height:60%;">
+        <canvas id="myCanvas" width="1000" height="700" style="border:1px solid #000000;">
+        </canvas>
+    </div> 
+    <div class = "row w-100 d-flex justify-content-center align-items-center m-0"  style="max-height:20%;">
+        <div class = "col-3">
+        </div>
+        <div class = "col-2 d-flex justify-content-center align-items-center">
+            <button type="button" class="btn btn-primary m-1">Randomize</button>
+        </div>
+        <div class = "col-2 d-flex justify-content-center align-items-center">
+            <button type="button" class="btn btn-primary m-1 material-icons">fast_rewind</button>            
+            <button type="button" class="btn btn-primary m-1 material-icons">skip_previous</button>            
+            <button type="button" class="btn btn-primary m-1 material-icons">play_arrow</button>
+            <button type="button" class="btn btn-primary m-1 material-icons">skip_next</button>
+            <button type="button" class="btn btn-primary m-1 material-icons">fast_forward</button>
+        </div>
+        <div class = "col-2 h-100 d-flex justify-content-center align-items-center">
+            <div class = "m-2">
+                Speed
+            </div>
+            <div class = "m-2">
+                <select class="custom-select">
+                    <option value="0.25">0.25x</option>
+                    <option value="0.5">0.5x</option>
+                    <option selected value="1">1x</option>
+                    <option value="1.5">1.5x</option>
+                    <option value="2">2x</option>
+                </select>
+            </div>
+        </div>
+        <div class = "col-3">
+        </div>
+    </div>                                   
+</div>       
 </body>
-</html>
