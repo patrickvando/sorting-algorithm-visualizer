@@ -8,11 +8,16 @@ function run_insertionsort(original_array){
         var jval, jr, jg, jb;
         for (var j = 0; j < k; j++){
             [jval, jr, jg, jb] = working_array[j];
+            color_index(working_array, j, 0, 0, 255);
+            frames.push(copy_array(working_array));
+            color_index(working_array, j, 0, 255, 0);
             if (kval < jval){
+                color_index(working_array, j, 0, 0, 255);
                 for(var m = k; m > j; m--){
                     [working_array[m], working_array[m - 1]] = [working_array[m - 1], working_array[m]];
                     frames.push(copy_array(working_array));
                 }
+                color_index(working_array, j + 1, 0, 255, 0);                
                 break;
             }
         }
