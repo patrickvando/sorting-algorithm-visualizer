@@ -10,6 +10,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
     <script src="utilities.js"></script>
+    <script src="quicksort.js"></script>
+    <script src="mergesort.js"></script>
+    <script src="heapsort.js"></script>
+    <script src="insertionsort.js"></script>
+    <script src="selectionsort.js"></script>
+    <script src="bubblesort.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href='style.css' %}">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -22,12 +28,26 @@
                 Sort Visualizer
             </div>
             <div class = "row d-flex justify-content-center align-items-center m-2">
-                <button type="button" class="btn btn-primary m-1">Quick Sort</button>            
-                <button type="button" class="btn btn-primary m-1">Merge Sort</button>            
-                <button type="button" class="btn btn-primary m-1">Heap Sort</button>
-                <button type="button" class="btn btn-primary m-1">Selection Sort</button>
-                <button type="button" class="btn btn-primary m-1">Insertion Sort</button>
-                <button type="button" class="btn btn-primary m-1">Bubble Sort</button>  
+                <div class="btn-group btn-group-toggle" data-toggle="buttons" id="alg_select">
+                    <label class="btn btn-primary active alg m-1">
+                        <input type="radio" name="options" id="option1" autocomplete="off" value="quicksort" checked> Quick Sort
+                    </label>
+                    <label class="btn btn-primary alg m-1">
+                        <input type="radio" name="options" id="option2" autocomplete="off" value="mergesort"> Merge Sort
+                    </label>
+                    <label class="btn btn-primary alg m-1">
+                        <input type="radio" name="options" id="option3" autocomplete="off" value="heapsort"> Heap Sort
+                    </label>
+                    <label class="btn btn-primary alg m-1">
+                        <input type="radio" name="options" id="option3" autocomplete="off" value="insertionsort"> Insertion Sort
+                    </label>
+                    <label class="btn btn-primary alg m-1">
+                        <input type="radio" name="options" id="option3" autocomplete="off" value="selectionsort"> Selection Sort
+                    </label>
+                    <label class="btn btn-primary alg m-1">
+                        <input type="radio" name="options" id="option3" autocomplete="off" value="bubblesort"> Bubble Sort
+                    </label>                                                            
+                </div>
             </div>
         </div>  
     </div>
@@ -67,6 +87,7 @@
     </div>                                   
 </div>
 <script>
+var current_algorithm;
 var frames = [];
 var current_frame = -1;
 var is_paused = true;
@@ -75,20 +96,32 @@ var speed = 100;
 
 var max_value = 99;
 var min_value = 0;
-var original_array_length = 60;
+var original_array_length = 50;
 var original_array = null;
 
 function init(){
-    run_algorithm("default");
+    randomize_original_array();
+    current_algorithm = $("#alg_select :input:checked").attr("value");
+    run_algorithm();
     display_current_frame();
 }
 
-function run_algorithm(alg_name){
-    if (alg_name == "quicksort"){
-
+function run_algorithm(){
+    if (current_algorithm == "quicksort"){
+        frames = run_quicksort(original_array);
+    } else if(current_algorithm == "mergesort"){
+        frames = run_mergesort(original_array);
+    } else if(current_algorithm == "heapsort"){
+        frames = run_heapsort(original_array);
+    } else if(current_algorithm == "insertionsort"){
+        frames = run_insertionsort(original_array);
+    } else if(current_algorithm == "selectionsort"){
+        frames = run_selectionsort(original_array);
+    } else if(current_algorithm == "bubblesort"){
+        frames = run_bubblesort(original_array);
     } else {
         frames = []
-        for(var k = 0; k < original_array_length; k++){
+        for(var k = 0; k < 1; k++){
             randomize_original_array();
             frames.push(copy_array(original_array));        
         }
@@ -99,7 +132,7 @@ function randomize_original_array(){
     original_array = [];
     for(var k = 0; k < original_array_length; k++){
         value = Math.floor(Math.random() * (max_value+ 1)) + min_value;
-        original_array.push([value, 255, 0, 0]);
+        original_array.push([value, 0, 0, 0]);
     }
 }
 
@@ -134,10 +167,10 @@ function display_frame(frame){
     var c = $("#canvas").get(0);
     var ctx = c.getContext("2d");
     ctx.clearRect(0, 0, c.width, c.height);
-    var start_x = 10;
-    var start_y = 50;
     var bar_width = 10;
     var bar_spacing = 10;
+    var start_x = (c.width - (frame.length * (bar_width + bar_spacing)) - bar_spacing) / 2;
+    var start_y = 50;
     var font_size = 15;
     for(var k = 0; k < frame.length; k++){
         var val, r, g, b;
@@ -194,7 +227,20 @@ $("#randomize_button").click(function(){
 
 $("#speed_dropdown").change(function(){
     speed = 100 / $(this).children("option:selected").attr("value");
-    console.log(speed);
+    pause();
+    play();
 });
+
+$("#alg_select :input").click(function(){
+    $("#alg_select :input").prop('checked', false);
+    $(this).prop('checked', true);
+    current_algorithm = $(this).attr("value");
+    pause();
+    run_algorithm();
+    current_frame = 0;
+    display_current_frame();
+    play();
+});
+
 </script>       
 </body>
