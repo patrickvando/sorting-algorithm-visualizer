@@ -8,22 +8,23 @@ function run_insertionsort(original_array){
         var jval, jr, jg, jb;
         for (var j = 0; j < k; j++){
             [jval, jr, jg, jb] = working_array[j];
-            color_index(working_array, j, 0, 0, 255);
+            color_range(working_array, 0, j, 0, 0, 255);
             frames.push(copy_array(working_array));
-            color_index(working_array, j, 0, 255, 0);
             if (kval < jval){
-                color_index(working_array, j, 0, 0, 255);
+                frames.pop()
+                color_index(working_array, j, 0, 255, 0);
                 for(var m = k; m > j; m--){
                     [working_array[m], working_array[m - 1]] = [working_array[m - 1], working_array[m]];
                     frames.push(copy_array(working_array));
                 }
-                color_index(working_array, j + 1, 0, 255, 0);                
                 break;
             }
         }
-        color_index(working_array, j, 0, 255, 0);        
+        color_range(working_array, 0, k, 0, 255, 0);
+        frames.push(copy_array(working_array));
     }
     color_range(working_array, 0, working_array.length - 1, 0, 0, 0);
     frames.push(copy_array(working_array));
-    return frames;
+    var legend = [["Insertion Sort Legend", 0, 0, 0], ["Target item", 255, 0, 0], ["Items less than or equal to target item", 0, 0, 255], ["Sorted items", 0, 255, 0]];
+    return [frames, legend];
 }

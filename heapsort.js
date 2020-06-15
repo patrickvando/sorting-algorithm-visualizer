@@ -80,5 +80,6 @@ function run_heapsort(original_array){
     }
     color_range(working_array, 0, working_array.length - 1, 0, 0, 0);
     frames.push(copy_array(working_array));
-    return frames;
+    var legend = [["Heapsort Legend", 0, 0, 0], ["In-place Max Heap", 0, 0, 255], ["Item being added to Max Heap", 255, 0, 0], ["Sorted Items", 0, 255, 0]]
+    return [frames, legend];
 }

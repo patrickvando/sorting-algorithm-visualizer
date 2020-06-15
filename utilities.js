@@ -1,3 +1,8 @@
+var c1 = [];
+var c2 = [];
+var c3 = [];
+var c4 = [];
+
 function copy_array(arr){
     if(!Array.isArray(arr)){
         return arr;

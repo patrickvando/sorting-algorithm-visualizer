@@ -25,5 +25,6 @@ function run_selectionsort(original_array){
     }
     color_range(working_array, 0, working_array.length - 1, 0, 0, 0);
     frames.push(copy_array(working_array));
-    return frames;
+    var legend = [["Selection Sort Legend", 0, 0, 0], ["Current item", 0, 0, 255], ["Current minimum among unsorted items", 255, 0, 0], ["Sorted Items", 0, 255, 0]]
+    return [frames, legend];
 }

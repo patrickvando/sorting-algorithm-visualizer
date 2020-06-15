@@ -52,7 +52,7 @@
         </div>  
     </div>
     <div class = "row w-100 m-0 d-flex justify-content-center align-items-center" style="max-height:60%;">
-        <canvas id="canvas" width="1400" height="700" style="border:1px solid #000000;">
+        <canvas id="canvas" width="1400" height="700">
         </canvas>
     </div> 
     <div class = "row w-100 d-flex justify-content-center align-items-center m-0"  style="max-height:20%;">
@@ -88,6 +88,7 @@
 </div>
 <script>
 var current_algorithm;
+var current_legend = [["Test", 0, 0, 0]];
 var frames = [];
 var current_frame = -1;
 var is_paused = true;
@@ -108,17 +109,17 @@ function init(){
 
 function run_algorithm(){
     if (current_algorithm == "quicksort"){
-        frames = run_quicksort(original_array);
+        [frames, current_legend] = run_quicksort(original_array);
     } else if(current_algorithm == "mergesort"){
-        frames = run_mergesort(original_array);
+        [frames, current_legend] = run_mergesort(original_array);
     } else if(current_algorithm == "heapsort"){
-        frames = run_heapsort(original_array);
+        [frames, current_legend] = run_heapsort(original_array);
     } else if(current_algorithm == "insertionsort"){
-        frames = run_insertionsort(original_array);
+        [frames, current_legend] = run_insertionsort(original_array);
     } else if(current_algorithm == "selectionsort"){
-        frames = run_selectionsort(original_array);
+        [frames, current_legend] = run_selectionsort(original_array);
     } else if(current_algorithm == "bubblesort"){
-        frames = run_bubblesort(original_array);
+        [frames, current_legend] = run_bubblesort(original_array);
     } else {
         frames = []
         for(var k = 0; k < 1; k++){
@@ -140,10 +141,10 @@ function play(){
     if (is_paused){
         is_paused = false;
         current_frame += 1;
-        display_current_frame()
+        display_current_frame();
         play_interval = setInterval(function(){
             current_frame += 1;
-            display_current_frame()
+            display_current_frame();
         }, speed);
         $("#play_button").html("pause");
     }
@@ -161,6 +162,7 @@ function display_current_frame(){
     current_frame = Math.max(0, current_frame);
     current_frame = Math.min(current_frame, frames.length - 1);
     display_frame(frames[current_frame]);
+    display_legend();
 }
 
 function display_frame(frame){
@@ -172,18 +174,40 @@ function display_frame(frame){
     var start_x = (c.width - (frame.length * (bar_width + bar_spacing)) - bar_spacing) / 2;
     var start_y = 50;
     var font_size = 15;
+    var bar_size_multiplier = 2;
     for(var k = 0; k < frame.length; k++){
         var val, r, g, b;
         [val, r, g, b] = frame[k];
-        ctx.beginPath();
         ctx.fillStyle = "rgba(" + r + "," + g + "," + b + ")";
-        ctx.fillRect(start_x + (bar_width + bar_spacing) * k, c.height - start_y, bar_width, -val);
+        ctx.fillRect(start_x + (bar_width + bar_spacing) * k, c.height - start_y, bar_width, -val * bar_size_multiplier);
         ctx.font = font_size + 'px serif';
         ctx.fillText(val, start_x + (bar_width + bar_spacing) * k, c.height - start_y + font_size);
-        ctx.stroke();
     }
 }
-init();
+
+function display_legend(){
+    var c = $("#canvas").get(0);
+    var ctx = c.getContext("2d");
+    var start_x = 195
+    var start_y = 100
+    var line_spacing = 10;
+    var block_size = 10;
+    var block_spacing = 5;
+    var font_size = 20;
+    var text, r, g, b;
+    [text, r, g, b] = current_legend[0];
+    ctx.fillStyle = "rgba(" + r + "," + g + "," + b + ")";
+    ctx.font = font_size + 'px serif';
+    ctx.fillText(text, start_x, start_y + font_size / 2);
+    for(var k = 1; k < current_legend.length; k++){
+        var text, r, g, b;
+        [text, r, g, b] = current_legend[k];
+        ctx.fillStyle = "rgba(" + r + "," + g + "," + b + ")";
+        ctx.fillRect(start_x, start_y + (font_size + line_spacing) * k, block_size, block_size);
+        ctx.font = font_size + 'px serif';
+        ctx.fillText(text, start_x + block_size + block_spacing, start_y + (font_size + line_spacing) * k + font_size / 2);
+    }
+}
 
 $("#play_button").click(function(){
     if (is_paused){
@@ -227,8 +251,10 @@ $("#randomize_button").click(function(){
 
 $("#speed_dropdown").change(function(){
     speed = 100 / $(this).children("option:selected").attr("value");
-    pause();
-    play();
+    if(!is_paused){
+        pause();
+        play();
+    }
 });
 
 $("#alg_select :input").click(function(){
@@ -239,8 +265,8 @@ $("#alg_select :input").click(function(){
     run_algorithm();
     current_frame = 0;
     display_current_frame();
-    play();
 });
 
+init();
 </script>       
 </body>

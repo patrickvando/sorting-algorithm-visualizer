@@ -27,6 +27,7 @@ function run_bubblesort(original_array){
         }
     }
     color_range(working_array, 0, working_array.length - 1, 0, 0, 0);
-    frames.push(copy_array(working_array));    
-    return frames;
+    frames.push(copy_array(working_array)); 
+    var legend = [["Bubblesort Legend", 0, 0, 0], ["Left item", 0, 0, 255], ["Right item", 255, 0, 0]];   
+    return [frames, legend];
 }

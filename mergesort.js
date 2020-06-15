@@ -48,7 +48,6 @@ function run_mergesort(original_array){
         }
     }
     mergesort(0, working_array.length - 1);
-    console.log("done");
-    console.log(frames.length);
-    return frames;
+    var legend = [["Mergesort Legend", 0, 0, 0], ["Left In-Order Partition", 255, 0, 0], ["Right In-Order Partition", 0, 0, 255], ["Merged In-Order Partition", 0, 255, 0]];
+    return [frames, legend];
 }
