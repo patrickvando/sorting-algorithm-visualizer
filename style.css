@@ -1,3 +1,32 @@
 #canvas {
     border: black 1px solid;
 }
+
+#play_row {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-evenly;
+}
+
+#custom_array {
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: center;
+}
+
+#canvas_with_play {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+}
+.roboto-mono {
+    font-family: 'Roboto Mono', monospace;
+}
+
+.roboto {
+    font-family: 'Roboto', sans-serif;
+}
+
+.background {
+    background-color: #f2f0e6;
+}

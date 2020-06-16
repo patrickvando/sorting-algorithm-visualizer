@@ -15,12 +15,12 @@ function copy_array(arr){
     }
 }
 
-function color_index(arr, ind, r, g, b){
-    arr[ind] = [arr[ind][0], r, g, b];
+function color_index(arr, ind, color){
+    arr[ind] = [arr[ind][0], color];
 }
 
-function color_range(arr, start, end, r, g, b){
+function color_range(arr, start, end, color){
     for(var k = start; k <= end; k++){
-        color_index(arr, k, r, g, b);
+        color_index(arr, k, color);
     }
 }

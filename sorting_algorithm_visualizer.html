@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">      
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>  
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
@@ -20,75 +23,83 @@
     <link rel="stylesheet" type="text/css" href='style.css' %}">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
-<body class="h-100 w-100"> 
-<div class="container-fluid row w-100 m-0">
-    <div class = "row w-100 m-0 d-flex justify-content-center align-items-center" style="max-height:20%;">
+<body class="h-100 w-100 roboto-mono"> 
+<div class = "d-flex align-items-start" style="flex-flow: column nowrap;">
+    <div class = "row w-100 m-0 d-flex justify-content-center align-items-center">
         <div class = "col">
-            <div class = "row d-flex justify-content-center align-items-center m-2">
-                Sort Visualizer
+            <div class = "row d-flex justify-content-center align-items-center m-3">
+                <b>Sort Visualizer</b>
             </div>
-            <div class = "row d-flex justify-content-center align-items-center m-2">
+            <div class = "row d-flex justify-content-center align-items-center mb-1">
                 <div class="btn-group btn-group-toggle" data-toggle="buttons" id="alg_select">
-                    <label class="btn btn-primary active alg m-1">
+                    <label class="btn btn-primary active alg ml-1 mr-1">
                         <input type="radio" name="options" id="option1" autocomplete="off" value="quicksort" checked> Quick Sort
                     </label>
-                    <label class="btn btn-primary alg m-1">
+                    <label class="btn btn-primary alg ml-1 mr-1">
                         <input type="radio" name="options" id="option2" autocomplete="off" value="mergesort"> Merge Sort
                     </label>
-                    <label class="btn btn-primary alg m-1">
+                    <label class="btn btn-primary alg ml-1 mr-1">
                         <input type="radio" name="options" id="option3" autocomplete="off" value="heapsort"> Heap Sort
                     </label>
-                    <label class="btn btn-primary alg m-1">
+                    <label class="btn btn-primary alg ml-1 mr-1">
                         <input type="radio" name="options" id="option3" autocomplete="off" value="insertionsort"> Insertion Sort
                     </label>
-                    <label class="btn btn-primary alg m-1">
+                    <label class="btn btn-primary alg ml-1 mr-1">
                         <input type="radio" name="options" id="option3" autocomplete="off" value="selectionsort"> Selection Sort
                     </label>
-                    <label class="btn btn-primary alg m-1">
+                    <label class="btn btn-primary alg ml-1 mr-1">
                         <input type="radio" name="options" id="option3" autocomplete="off" value="bubblesort"> Bubble Sort
                     </label>                                                            
                 </div>
             </div>
         </div>  
     </div>
-    <div class = "row w-100 m-0 d-flex justify-content-center align-items-center" style="max-height:60%;">
-        <canvas id="canvas" width="1400" height="700">
-        </canvas>
-    </div> 
-    <div class = "row w-100 d-flex justify-content-center align-items-center m-0"  style="max-height:20%;">
-        <div class = "col-3">
-        </div>
-        <div class = "col-2 d-flex justify-content-center align-items-center">
-            <button type="button" class="btn btn-primary m-1" id="randomize_button">Randomize</button>
-        </div>
-        <div class = "col-2 d-flex justify-content-center align-items-center">
-            <button type="button" class="btn btn-primary m-1 material-icons" id="goto_beginning_button">fast_rewind</button>            
-            <button type="button" class="btn btn-primary m-1 material-icons" id="step_backward_button">skip_previous</button>            
-            <button type="button" class="btn btn-primary m-1 material-icons" id="play_button">play_arrow</button>
-            <button type="button" class="btn btn-primary m-1 material-icons" id="step_forward_button">skip_next</button>
-            <button type="button" class="btn btn-primary m-1 material-icons" id="goto_end_button">fast_forward</button>
-        </div>
-        <div class = "col-2 h-100 d-flex justify-content-center align-items-center">
-            <div class = "m-2">
-                Speed
+    <div class = "row w-100 m-0 d-flex justify-content-center align-items-center" style="flex-basis: 100px;"">This is text.</div>
+    <div class = "row w-100 m-0 d-flex justify-content-center align-items-center">
+        <div id = "canvas_with_play">
+            <canvas id="canvas" width="1200" height="550" class="mt-1 mb-1">
+            </canvas>
+            <div id = "play_row" class = "m-3">
+                <div class = "d-flex justify-content-center align-items-center">
+                    <button type="button" class="btn btn-primary m-2" id="randomize_button">Randomize</button>
+                </div>
+                <div class = "d-flex justify-content-center align-items-center">
+                    <button type="button" class="btn btn-primary m-1 material-icons" id="goto_beginning_button">fast_rewind</button>            
+                    <button type="button" class="btn btn-primary m-1 material-icons" id="step_backward_button">skip_previous</button>            
+                    <button type="button" class="btn btn-primary m-1 material-icons" id="play_button">play_arrow</button>
+                    <button type="button" class="btn btn-primary m-1 material-icons" id="step_forward_button">skip_next</button>
+                    <button type="button" class="btn btn-primary m-1 material-icons" id="goto_end_button">fast_forward</button>
+                </div>
+                <div class = "d-flex justify-content-center align-items-center">
+                    <div class = "m-2">
+                        Speed
+                    </div>
+                    <div class = "m-2">
+                        <select class="custom-select" id="speed_dropdown">
+                            <option value=0.25>0.25x</option>
+                            <option value=0.5>0.5x</option>
+                            <option selected value=1>1x</option>
+                            <option value=1.5>1.5x</option>
+                            <option value=2>2x</option>
+                        </select>
+                    </div>
+                </div>
             </div>
-            <div class = "m-2">
-                <select class="custom-select" id="speed_dropdown">
-                    <option value=0.25>0.25x</option>
-                    <option value=0.5>0.5x</option>
-                    <option selected value=1>1x</option>
-                    <option value=1.5>1.5x</option>
-                    <option value=2>2x</option>
-                </select>
+            <div id = "custom_array">
+                <div class = "row d-flex m-0" style="justify-content: space-between;">
+                    <textarea rows = "2" cols = "100" id="text_array"></textarea>
+                    <button id="customize_array_button" type="button" class = "btn btn-primary">Customize Values</button>
+                </div>
+                <div class = "row d-flex m-0 mt-2">Custom values must be nonnegative integers less than or equal to 100. Maximum allowed array length is 55 elements.</div>
             </div>
         </div>
-        <div class = "col-3">
-        </div>
-    </div>                                   
+    </div>
+    <div class = "row w-100 d-flex justify-content-center align-items-center"><br><br><a href="https://github.com/patrickvando">github</a></div>     
+</div>
 </div>
 <script>
 var current_algorithm;
-var current_legend = [["Test", 0, 0, 0]];
+var current_legend;
 var frames = [];
 var current_frame = -1;
 var is_paused = true;
@@ -97,14 +108,76 @@ var speed = 100;
 
 var max_value = 99;
 var min_value = 0;
+var max_array_length = 55;
 var original_array_length = 50;
 var original_array = null;
 
 function init(){
+    populate_original_array();
     randomize_original_array();
     current_algorithm = $("#alg_select :input:checked").attr("value");
     run_algorithm();
     display_current_frame();
+    update_text_input();
+}
+
+function array_to_text(){
+    var st = "";
+    for(var k = 0; k < original_array.length; k++){
+        var value, color;
+        [value, color] = original_array[k];
+        st += value + ", ";
+    }
+    if (st.length >= 2){
+        st = st.slice(0, -2);
+    }
+    return st;
+}
+
+function update_text_input(){
+    var st = array_to_text();
+    $("#text_array").val(st);
+}
+
+function text_to_array(){
+    var st = $("#text_array").val();
+    st = st.replace(/\s+/g, '');
+    invalids = st.match(/[^\d,]+/g);
+    if (invalids != null){
+        return [false, []];
+    }
+    st = st + ",";
+    var numbers = st.match(/[\d]+,/g);
+    if (numbers.length > max_array_length){
+        return [false, []];
+    }
+    var new_arr = [];
+    for (var k = 0; k < numbers.length; k++){
+        var number = numbers[k].match(/[\d]+/)[0];
+        number = parseInt(number);
+        if (number < 0 || number > max_value){
+            return [false, []];
+        }
+        new_arr.push([number, "#000000"]);
+    }
+    return [true, new_arr];
+}
+
+function customize_array(){
+    console.log("customiznig");
+    var valid, custom_arr;
+    [valid, custom_arr] = text_to_array();
+    console.log(valid, custom_arr);
+    if (valid){
+        console.log("valid");
+        original_array = custom_arr;
+        pause();    
+        run_algorithm();
+        current_frame = 0;
+        display_current_frame();        
+    } else {
+
+    }
 }
 
 function run_algorithm(){
@@ -129,11 +202,18 @@ function run_algorithm(){
     }
 }
 
-function randomize_original_array(){
+function populate_original_array(){
     original_array = [];
     for(var k = 0; k < original_array_length; k++){
         value = Math.floor(Math.random() * (max_value+ 1)) + min_value;
-        original_array.push([value, 0, 0, 0]);
+        original_array.push([value, "#000000"]);
+    }
+}
+
+function randomize_original_array(){
+    for(var k = 0; k < original_array.length; k++){
+        var rand_ind = Math.floor(Math.random() * (original_array.length - k) + k);
+        [original_array[k], original_array[rand_ind]] = [original_array[rand_ind], original_array[k]];
     }
 }
 
@@ -176,11 +256,11 @@ function display_frame(frame){
     var font_size = 15;
     var bar_size_multiplier = 2;
     for(var k = 0; k < frame.length; k++){
-        var val, r, g, b;
-        [val, r, g, b] = frame[k];
-        ctx.fillStyle = "rgba(" + r + "," + g + "," + b + ")";
+        var val, color;
+        [val, color] = frame[k];
+        ctx.fillStyle = color;
         ctx.fillRect(start_x + (bar_width + bar_spacing) * k, c.height - start_y, bar_width, -val * bar_size_multiplier);
-        ctx.font = font_size + 'px serif';
+        ctx.font = font_size + 'px Roboto Mono';
         ctx.fillText(val, start_x + (bar_width + bar_spacing) * k, c.height - start_y + font_size);
     }
 }
@@ -188,23 +268,23 @@ function display_frame(frame){
 function display_legend(){
     var c = $("#canvas").get(0);
     var ctx = c.getContext("2d");
-    var start_x = 195
+    var start_x = 95
     var start_y = 100
     var line_spacing = 10;
     var block_size = 10;
     var block_spacing = 5;
     var font_size = 20;
     var text, r, g, b;
-    [text, r, g, b] = current_legend[0];
-    ctx.fillStyle = "rgba(" + r + "," + g + "," + b + ")";
-    ctx.font = font_size + 'px serif';
+    [text, color] = current_legend[0];
+    ctx.font = font_size + "px Roboto Mono";
+    ctx.fillStyle = color;
     ctx.fillText(text, start_x, start_y + font_size / 2);
     for(var k = 1; k < current_legend.length; k++){
-        var text, r, g, b;
-        [text, r, g, b] = current_legend[k];
-        ctx.fillStyle = "rgba(" + r + "," + g + "," + b + ")";
+        var text, color;
+        [text, color] = current_legend[k];
+        ctx.fillStyle = color;
         ctx.fillRect(start_x, start_y + (font_size + line_spacing) * k, block_size, block_size);
-        ctx.font = font_size + 'px serif';
+        ctx.font = font_size + 'px Roboto Mono';
         ctx.fillText(text, start_x + block_size + block_spacing, start_y + (font_size + line_spacing) * k + font_size / 2);
     }
 }
@@ -247,6 +327,7 @@ $("#randomize_button").click(function(){
     run_algorithm();
     current_frame = 0;
     display_current_frame();
+    update_text_input();
 });
 
 $("#speed_dropdown").change(function(){
@@ -267,6 +348,13 @@ $("#alg_select :input").click(function(){
     display_current_frame();
 });
 
-init();
+$("#customize_array_button").click(function(){
+    customize_array();
+});
+
+WebFont.load({
+    google: {families: ["Roboto Mono"]},
+    active: init
+});
 </script>       
 </body>

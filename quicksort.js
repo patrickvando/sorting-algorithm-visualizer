@@ -14,9 +14,9 @@ function run_quicksort(original_array){
         var pivot = end;
         var pval, pr, pg, pb;
         [pval, pr, pg, pb] = working_array[pivot];
-        color_range(working_array, start, end, 0, 150, 0);
+        color_range(working_array, start, end, "#F0F0F0");
         frames.push(copy_array(working_array));
-        color_index(working_array, pivot, 0, 255, 0);
+        color_index(working_array, pivot, "#00FF00");
         frames.push(copy_array(working_array));
         var j = start;
         for (var k = start; k < end; k++){
@@ -26,17 +26,17 @@ function run_quicksort(original_array){
                 [working_array[j], working_array[k]] = [working_array[k], working_array[j]];
                 j += 1;
             }
-            color_range(working_array, start, j - 1, 0, 0, 255)
-            color_range(working_array, j, k, 255, 0, 0);
+            color_range(working_array, start, j - 1, "#0000FF")
+            color_range(working_array, j, k, "#FF0000");
             frames.push(copy_array(working_array));
         }
         [working_array[j], working_array[pivot]] = [working_array[pivot], working_array[j]];
         frames.push(copy_array(working_array));
-        color_range(working_array, start, end, 0, 0, 0);
+        color_range(working_array, start, end, "#000000");
         return j;
     }
     quicksort(0, working_array.length - 1);
     frames.push(working_array);
-    var legend = [["Quicksort Legend", 0, 0, 0], ["Current Partition", 0, 150, 0], ["Pivot", 0, 255, 0], ["Items in partition less than Pivot", 0, 0, 255], ["Items in partition greater than or equal to Pivot", 255, 0, 0]];
+    var legend = [["Quicksort Legend", "#000000"], ["Current Partition", "#F0F0F0"], ["Pivot", "#00FF00"], ["Items in partition less than Pivot", "#0000FF"], ["Items in partition greater than or equal to Pivot", "#FF0000"]];
     return [frames, legend];
 }
