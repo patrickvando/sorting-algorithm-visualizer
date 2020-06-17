@@ -108,7 +108,7 @@
                     <textarea rows = "2" cols = "100" id="text_array"></textarea>
                     <button id="customize_array_button" type="button" class = "btn btn_normal">Customize Values</button>
                 </div>
-                <div id = "custom_array_requiremnets" class = "row d-flex m-0 mt-2">Custom elements must be integers greater than or equal to 0 and less than 100.<br>Separate elements using commas only. Maximum length of 55 elements.</div>
+                <div id = "custom_array_requirements" class = "row d-flex m-0 mt-2">Custom elements must be integers greater than or equal to 0 and less than 100.<br>Separate elements using commas only. Maximum length of 55 elements.</div>
             </div>
         </div>
     </div>
@@ -186,16 +186,16 @@ function customize_array(){
     [valid, custom_arr] = text_to_array();
 
     if (valid){
-        $("#custom_array_requiremnets").addClass("valid_custom_array");
-        $("#custom_array_requiremnets").removeClass("invalid_custom_array");
+        $("#custom_array_requirements").addClass("valid_custom_array");
+        $("#custom_array_requirements").removeClass("invalid_custom_array");
         original_array = custom_arr;
         pause();    
         run_algorithm();
         current_frame = 0;
         display_current_frame();        
     } else {
-        $("#custom_array_requiremnets").removeClass("valid_custom_array");
-        $("#custom_array_requiremnets").addClass("invalid_custom_array");
+        $("#custom_array_requirements").removeClass("valid_custom_array");
+        $("#custom_array_requirements").addClass("invalid_custom_array");
     }
 }
 
@@ -368,7 +368,6 @@ $("#alg_select :input").click(function(){
     if ($("#alg_select .btn").has(this).hasClass('selected_btn_alg')){
         return;
     }
-    console.log("??");
     $("#alg_select .btn").removeClass('selected_btn_alg');
     $("#alg_select .btn").has(this).addClass('selected_btn_alg');
     current_algorithm = $(this).attr("value");
