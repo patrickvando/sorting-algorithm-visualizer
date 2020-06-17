@@ -12,9 +12,9 @@ function run_heapsort(original_array){
 
     function insert_into_heap(){
         var ind = heap_size;
-        color_index(working_array, ind, "#FF0000");
+        color_index(working_array, ind, color_1);
         frames.push(copy_array(working_array));            
-        color_index(working_array, ind, "#0000FF");        
+        color_index(working_array, ind, color_3);        
         var ival, ir, ig, ib;
         [ival, ir, ig, ib] = working_array[ind];
         var parent = Math.floor((ind - 1) / 2);
@@ -23,9 +23,9 @@ function run_heapsort(original_array){
             [pval, pr, pg, pb] = working_array[parent];
         }
         while(parent > 0 && ival > pval){
-            color_index(working_array, ind, "#FF0000");
+            color_index(working_array, ind, color_1);
             frames.push(copy_array(working_array));            
-            color_index(working_array, ind, "#0000FF");
+            color_index(working_array, ind, color_3);
             [working_array[ind], working_array[parent]] = [working_array[parent], working_array[ind]];
             ind = parent;
             parent = Math.floor((ind - 1) / 2);
@@ -40,7 +40,7 @@ function run_heapsort(original_array){
 
     function pop_from_heap(){
         [working_array[0], working_array[heap_size - 1]] = [working_array[heap_size - 1], working_array[0]];
-        color_index(working_array, heap_size - 1, "#00FF00");
+        color_index(working_array, heap_size - 1, color_2);
         heap_size -= 1;
         ind = 0;
         [ival, ir, ig, ib] = working_array[ind];
@@ -78,8 +78,8 @@ function run_heapsort(original_array){
         }
         frames.push(copy_array(working_array));
     }
-    color_range(working_array, 0, working_array.length - 1, "#000000");
+    color_range(working_array, 0, working_array.length - 1, color_5);
     frames.push(copy_array(working_array));
-    var legend = [["Heapsort Legend", "#000000"], ["In-place Max Heap", "#0000FF"], ["Item being added to Max Heap", "#FF0000"], ["Sorted Items", "#00FF00"]]
+    var legend = [["Heapsort Legend", color_5], ["In-place max heap", color_3], ["Element being added to max heap", color_1], ["Sorted elements", color_2]]
     return [frames, legend];
 }

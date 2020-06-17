@@ -8,8 +8,8 @@ function run_mergesort(original_array){
             var midpoint = Math.floor((start + end) / 2);
             mergesort(start, midpoint);
             mergesort(midpoint + 1, end);
-            color_range(working_array, start, midpoint, "#FF0000");
-            color_range(working_array, midpoint + 1, end, "#0000FF");
+            color_range(working_array, start, midpoint, color_1);
+            color_range(working_array, midpoint + 1, end, color_3);
             frames.push(copy_array(working_array));
             var arr = [];
             var k = start;
@@ -38,15 +38,15 @@ function run_mergesort(original_array){
             var j = 0;
             for (var k = start; k <= end; k++){
                 working_array[k] = arr[j];
-                color_index(working_array, k, "#00FF00");
+                color_index(working_array, k, color_2);
                 frames.push(copy_array(working_array));
                 j += 1;
             }
-            color_range(working_array, start, end, "#000000");
+            color_range(working_array, start, end, color_5);
             frames.push(copy_array(working_array));
         }
     }
     mergesort(0, working_array.length - 1);
-    var legend = [["Mergesort Legend", "#000000"], ["Left In-Order Partition", "#FF0000"], ["Right In-Order Partition", "#0000FF"], ["Merged In-Order Partition", "#00FF00"]];
+    var legend = [["Mergesort Legend", color_5], ["Left in-order partition", color_1], ["Right in-order partition", color_3], ["Merged in-order partition", color_2]];
     return [frames, legend];
 }

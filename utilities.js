@@ -1,7 +1,9 @@
-var c1 = [];
-var c2 = [];
-var c3 = [];
-var c4 = [];
+var color_1 = "#FF0000";
+var color_2 = "#008000";
+var color_3 = "#0000FF";
+var color_4 = "#8B4513";
+var color_5 = "#000000";
+var color_6 = "#FFFFFF";
 
 function copy_array(arr){
     if(!Array.isArray(arr)){
