@@ -1,6 +1,6 @@
 <h1>Sorting Algorithm Visualizer</h1>
 
-This project is live at https://patrickvando.github.io/sorting\_algorithm\_visualizer/
+This project is live at https://patrickvando.github.io/sorting_algorithm_visualizer/
 
 ![Demo Screencap](/assets/screencap.png "Sorting Algorithm Visualizer")
 
