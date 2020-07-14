@@ -20,7 +20,7 @@
     <script src="selectionsort.js"></script>
     <script src="bubblesort.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href='style.css' %}">
+    <link rel="stylesheet" type="text/css" href='style.css'>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body class="roboto-mono"> 
@@ -117,17 +117,30 @@
 </div>
 </div>
 <script>
+// Name of the selected algorithm
 var current_algorithm;
+
+// Legend associated with the current algorithm
 var current_legend;
+
+// Each frame is a color-coded "step" in the algorithm
 var frames = [];
 var current_frame = -1;
-var is_paused = true;
+
+
+// Animation interval for the frames
 var play_interval = null;
+// Controls how fast the animation cycles through frames
 var speed = 100;
 
+var is_paused = true;
+
+// Limits for the display array
 var max_value = 99;
 var min_value = 0;
 var max_array_length = 55;
+
+// The display array; each element in the array is a value with a corresponding color code
 var original_array_length = 50;
 var original_array = null;
 
@@ -140,6 +153,7 @@ function init(){
     update_text_input();
 }
 
+// Turn the values in the array into a comma separated list
 function array_to_text(){
     var st = "";
     for(var k = 0; k < original_array.length; k++){
@@ -153,11 +167,13 @@ function array_to_text(){
     return st;
 }
 
+// Update the input text box with the current display array values
 function update_text_input(){
     var st = array_to_text();
     $("#text_array").val(st);
 }
 
+// Change the display array to match the text in the input text box; default color for each value is black
 function text_to_array(){
     var st = $("#text_array").val();
     st = st.replace(/\s+/g, '');
@@ -182,6 +198,7 @@ function text_to_array(){
     return [true, new_arr];
 }
 
+// Handle changes in the input text box for custom arrays
 function customize_array(){
     var valid, custom_arr;
     [valid, custom_arr] = text_to_array();
@@ -200,6 +217,7 @@ function customize_array(){
     }
 }
 
+// Run the selected algorithm on the array
 function run_algorithm(){
     $(".alg_desc").addClass("alg_desc_hidden");
     if (current_algorithm == "quicksort"){
@@ -229,6 +247,7 @@ function run_algorithm(){
     }
 }
 
+// Create the default display array
 function populate_original_array(){
     original_array = [];
     for(var k = 0; k < original_array_length; k++){
@@ -237,6 +256,7 @@ function populate_original_array(){
     }
 }
 
+// Randomize the display array
 function randomize_original_array(){
     for(var k = 0; k < original_array.length; k++){
         var rand_ind = Math.floor(Math.random() * (original_array.length - k) + k);
@@ -244,6 +264,7 @@ function randomize_original_array(){
     }
 }
 
+// Cycle through the "frames" of the animation
 function play(){
     if (is_paused){
         is_paused = false;
@@ -257,6 +278,7 @@ function play(){
     }
 }
 
+// Pause the animation
 function pause(){
     if (!is_paused){
         is_paused = true;
@@ -265,6 +287,7 @@ function pause(){
     }
 }
 
+// Draw the current frame in the display array and the corresponding legend for the selected algorithm
 function display_current_frame(){
     current_frame = Math.max(0, current_frame);
     current_frame = Math.min(current_frame, frames.length - 1);
@@ -272,6 +295,7 @@ function display_current_frame(){
     display_legend();
 }
 
+// Draw the frame on the canvas
 function display_frame(frame){
     var c = $("#canvas").get(0);
     var ctx = c.getContext("2d");
@@ -292,6 +316,7 @@ function display_frame(frame){
     }
 }
 
+// Draw the legend on the canvas
 function display_legend(){
     var c = $("#canvas").get(0);
     var ctx = c.getContext("2d");
@@ -316,6 +341,7 @@ function display_legend(){
     }
 }
 
+// Toggle play/pause when play button is clicked
 $("#play_button").click(function(){
     if (is_paused){
         play();
@@ -324,30 +350,36 @@ $("#play_button").click(function(){
     }
 });
 
+// Step one frame forward in the animation; pause the animation if it is not already paused
 $("#step_forward_button").click(function(){
     pause();
     current_frame += 1;
     display_current_frame();
 });
 
+
+// Step one frame backward in the animation; pause the animation if it is not already paused
 $("#step_backward_button").click(function(){
     pause();
     current_frame -= 1;
     display_current_frame();
 });
 
+// Go to the first frame in the animation; pause the animation if it is not already paused
 $("#goto_beginning_button").click(function(){
     pause();
     current_frame = 0;
     display_current_frame();    
 });
 
+// Go to the last frame in the animation; pause the animation if it is not already paused
 $("#goto_end_button").click(function(){
     pause();
     current_frame = frames.length;
     display_current_frame(); 
 });
 
+// Randomize the display array when the randomized button is clicked
 $("#randomize_button").click(function(){
     pause();
     randomize_original_array();
@@ -357,6 +389,7 @@ $("#randomize_button").click(function(){
     update_text_input();
 });
 
+// Change the speed of the animation when a different speed is selected from the dropdown
 $("#speed_dropdown").change(function(){
     speed = 100 / $(this).children("option:selected").attr("value");
     if(!is_paused){
@@ -365,6 +398,7 @@ $("#speed_dropdown").change(function(){
     }
 });
 
+// Run the algorithm and display the first frame in the animation when the user selects a different algorithm
 $("#alg_select :input").click(function(){
     if ($("#alg_select .btn").has(this).hasClass('selected_btn_alg')){
         return;
@@ -378,10 +412,12 @@ $("#alg_select :input").click(function(){
     display_current_frame();
 });
 
+// Customize the array using the text box input when the user clicks the corresponding button
 $("#customize_array_button").click(function(){
     customize_array();
 });
 
+// Preload font so it can be used on the canvas
 WebFont.load({
     google: {families: ["Roboto Mono"]},
     active: init
