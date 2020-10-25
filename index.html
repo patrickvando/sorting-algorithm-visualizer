@@ -27,7 +27,7 @@
 <div class = "d-flex align-items-center" style="flex-flow: column nowrap;">
     <div class = "row m-0 d-flex justify-content-center align-items-center">
         <div class = "col">
-            <div class = "row d-flex justify-content-center align-items-center m-3">
+            <div class = "row d-flex justify-content-center align-items-center m-2">
                 <b>Sort Visualizer</b>
             </div>
             <div class = "row d-flex justify-content-center align-items-center mb-1">
@@ -54,9 +54,6 @@
             </div>
         </div>  
     </div>
-    <!--
-        TODO - MAKE ALL DESCS TAKE UP CONSTANT VERTICAL SPACE
-    -->
     <div class = "mt-2 d-flex justify-content-center align-items-center" style="flex-basis: 170px;">
         <div id = "quicksort_description" class = "alg_desc"><p>Quicksort is an efficient divide-and-conquer sorting algorithm. It works by selecting a "pivot" element from the current partition, then subdividing the current partition into two smaller partitions of elements less than the pivot and elements greater than or equal to the pivot. The pivot is then placed between these two partitions (the location where it would be in the fully sorted array). This process then repeats on each of the smaller partitions. (<a href="https://en.wikipedia.org/wiki/Quicksort">read more on Wikipedia</a>)<br><br>Quicksort is an <a href="https://en.wikipedia.org/wiki/In-place_algorithm">in-place<a> <a href="https://www.geeksforgeeks.org/stability-in-sorting-algorithms/">unstable sort</a> with an average performance of O(n log n) and a worst case performance of O(n^2). This implementation of Quicksort uses the <a href="https://en.wikipedia.org/wiki/Quicksort#Lomuto_partition_scheme">Lomuto partition scheme</a>.</p></div>
 
@@ -76,9 +73,9 @@
     </div>
     <div class = "row m-0 d-flex justify-content-center align-items-center">
         <div id = "canvas_with_play">
-            <canvas id="canvas" width="1200" height="480" class="mb-1">
+            <canvas id="canvas" width="1200" height="480" class="mb-0">
             </canvas>
-            <div id = "play_row" class = "m-3">
+            <div id = "play_row" class = "m-1">
                 <div class = "d-flex justify-content-center align-items-center">
                     <button type="button" class="btn btn_normal m-2" id="randomize_button">Randomize Order</button>
                 </div>
@@ -109,12 +106,12 @@
                     <textarea rows = "2" cols = "100" id="text_array"></textarea>
                     <button id="customize_array_button" type="button" class = "btn btn_normal">Customize Values</button>
                 </div>
-                <div id = "custom_array_requirements" class = "row d-flex m-0 mt-2">Custom elements must be integers greater than or equal to 0 and less than 100.<br>Separate elements using commas only. Maximum length of 55 elements.</div>
+                <div id = "custom_array_requirements" class = "row d-flex m-0 mt-1">Custom elements must be integers greater than or equal to 0 and less than 100.<br>Separate elements using commas only. Maximum length of 55 elements.</div>
             </div>
         </div>
     </div>
-    <div class = "row d-flex justify-content-center align-items-center"><br><br><a href="https://github.com/patrickvando">github</a></div>     
-</div>
+<!--     <div class = "row d-flex justify-content-center align-items-center"><br><br><a href="https://github.com/patrickvando">github</a></div>     
+ --></div>
 </div>
 <script>
 // Name of the selected algorithm
