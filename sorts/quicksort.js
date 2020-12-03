@@ -37,6 +37,6 @@ function run_quicksort(original_array){
     }
     quicksort(0, working_array.length - 1);
     frames.push(working_array);
-    var legend = [["Quicksort Legend", color_5], ["Current partition", color_4], ["Pivot", color_2], ["Elements in partition less than pivot", color_3], ["Elements in partition greater than or equal to pivot", color_1]];
+    var legend = [["Quicksort Legend", color_5], ["Remaining elements in partition", color_4], ["Pivot", color_2], ["Elements in partition less than pivot", color_3], ["Elements in partition greater than or equal to pivot", color_1]];
     return [frames, legend];
 }
