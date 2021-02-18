@@ -36,13 +36,13 @@ function AlgorithmSelect(props) {
     currentAlgorithmDescription,
   ] = props.currentAlgorithm;
   return (
-    <div >
-      <div className="d-flex justify-content-around">
+    <div>
+      <div className="select-row">
         {props.algorithmOptions.map(
           ([algorithmName, algorithm, algorithmDescription]) => {
-            let classes = "algorithm-button ";
+            let classes = "btn btn-outline-dark algorithm-button ";
             if (currentAlgorithmName == algorithmName) {
-              classes += "selected-algorithm-button ";
+              classes += "active ";
             }
             return (
               <button
@@ -63,6 +63,26 @@ function AlgorithmSelect(props) {
           }
         )}
       </div>
+    </div>
+  );
+}
+
+function Description(props) {
+  let currentAlgorithmName, currentAlgorithmRunner, currentAlgorithmDescription;
+  [
+    currentAlgorithmName,
+    currentAlgorithmRunner,
+    currentAlgorithmDescription,
+  ] = props.currentAlgorithm;
+  return (
+    <div className="Description">
+      <div className="description-block">
+        Use this visualizer to compare different sorts. Each "frame" of the
+        visualization corresponds to a single swap between two elements. Try
+        comparing the "efficient sorts" (Quicksort, Mergesort, and Heapsort) to
+        the others!
+      </div>
+      <br />
       <div>{currentAlgorithmDescription}</div>
     </div>
   );
@@ -216,21 +236,34 @@ class Controls extends React.Component {
   }
 
   render() {
+    let frameIndex = (this.props.frameIndex + 1).toString();
+    let maxFrameIndex = (this.props.maxFrameIndex + 1).toString();
+    frameIndex = frameIndex.padStart(maxFrameIndex.length, " ");
     return (
       <div>
         <div>
           <div>
-            <input
-              className="frame-slider"
-              type="range"
-              min={0}
-              max={this.props.maxFrameIndex}
-              value={this.props.frameIndex}
-              onChange={(event) => this.pauseAndChangeFrame(event.target.value)}
-            />
+            <div className="frame-controls">
+              <div>
+                <span className="frame-slider-label">
+                  {"Frame: " + frameIndex + "/" + maxFrameIndex}
+                </span>
+              </div>
+              <input
+                className="frame-slider"
+                type="range"
+                min={0}
+                max={this.props.maxFrameIndex}
+                value={this.props.frameIndex}
+                onChange={(event) =>
+                  this.pauseAndChangeFrame(event.target.value)
+                }
+              />
+            </div>
           </div>
-          <div>
+          <div className="playback-bar">
             <button
+              className="btn btn-outline-dark"
               onClick={() => {
                 let randomizedArray = this.randomizeArray(
                   this.props.startingArray
@@ -245,36 +278,47 @@ class Controls extends React.Component {
             >
               Randomize Order
             </button>
-            <button onClick={(event) => this.pauseAndChangeFrame(0)}>
-              <FastRewind />
-            </button>
-            <button
-              onClick={(event) =>
-                this.pauseAndChangeFrame(this.props.frameIndex - 1)
-              }
-            >
-              <SkipPrevious />
-            </button>
-            <button onClick={(event) => this.props.pause(!this.props.isPaused)}>
-              {this.props.isPaused ? <PlayArrow /> : <Pause />}
-            </button>
-            <button
-              onClick={(event) =>
-                this.pauseAndChangeFrame(this.props.frameIndex + 1)
-              }
-            >
-              <SkipNext />
-            </button>
-            <button
-              onClick={(event) =>
-                this.pauseAndChangeFrame(this.props.maxFrameIndex)
-              }
-            >
-              <FastForward />
-            </button>
+            <div className="step-controls">
+              <button
+                className="btn btn-outline-dark"
+                onClick={(event) => this.pauseAndChangeFrame(0)}
+              >
+                <FastRewind />
+              </button>
+              <button
+                className="btn btn-outline-dark"
+                onClick={(event) =>
+                  this.pauseAndChangeFrame(this.props.frameIndex - 1)
+                }
+              >
+                <SkipPrevious />
+              </button>
+              <button
+                className="btn btn-outline-dark"
+                onClick={(event) => this.props.pause(!this.props.isPaused)}
+              >
+                {this.props.isPaused ? <PlayArrow /> : <Pause />}
+              </button>
+              <button
+                className="btn btn-outline-dark"
+                onClick={(event) =>
+                  this.pauseAndChangeFrame(this.props.frameIndex + 1)
+                }
+              >
+                <SkipNext />
+              </button>
+              <button
+                className="btn btn-outline-dark"
+                onClick={(event) =>
+                  this.pauseAndChangeFrame(this.props.maxFrameIndex)
+                }
+              >
+                <FastForward />
+              </button>
+            </div>
             <form>
-              <label>
-                Speed
+              <label className="speed">
+                <span className="speed-label">Speed:</span>
                 <input
                   className="speed-slider"
                   type="range"
@@ -361,14 +405,18 @@ class ValueCustomizer extends React.Component {
     return (
       <div>
         <form onSubmit={this.handleCustomValuesSubmission}>
-          <label>
+          <label className="custom-value-submission-label">
             <textarea
-              rows="4"
-              cols="50"
+              rows="2"
+              cols="100"
               onChange={this.props.handleCustomValuesChange}
               value={this.props.customValues}
             />
-            <input type="submit" value="Customize Values" />
+            <input
+              className="btn btn-outline-dark"
+              type="submit"
+              value="Customize Values"
+            />
           </label>
         </form>
         <div>{validCriteriaMessage}</div>
@@ -484,6 +532,7 @@ class Visualizer extends React.Component {
           runAlgorithm={this.runAlgorithm}
           changeAlgorithm={this.changeAlgorithm}
         />
+        <Description currentAlgorithm={this.state.currentAlgorithm} />
         <Display
           canvasRef={this.canvasRef}
           width={1200}
@@ -516,14 +565,16 @@ class Visualizer extends React.Component {
 function App() {
   return (
     <div className="App">
-      <span>Sort Visualizer</span>
+      <span>
+        <b>Sort Visualizer</b>
+      </span>
       <Visualizer
         arrayLength={50}
         minimum={10}
         maximum={50}
         baseAnimationSpeed={100}
         algorithmOptions={algorithmOptions}
-        defaultAlgorithm={algorithmOptions[3]}
+        defaultAlgorithm={algorithmOptions[0]}
       />
     </div>
   );

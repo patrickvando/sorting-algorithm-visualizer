@@ -43,6 +43,8 @@ export function runHeapsort(originalArray){
     function pop_from_heap(){
         [workingArray[0], workingArray[heap_size - 1]] = [workingArray[heap_size - 1], workingArray[0]];
         utils.colorIndex(workingArray, heap_size - 1, utils.color2);
+        utils.colorIndex(workingArray, 0, utils.color1);        
+        frames.push(utils.copyArray(workingArray));
         heap_size -= 1;
         var ind = 0;
         var ival, ir, ig, ib;
@@ -65,6 +67,7 @@ export function runHeapsort(originalArray){
                 [workingArray[child2], workingArray[ind]] = [workingArray[ind], workingArray[child2]];                
                 ind = child2;
             }
+            frames.push(utils.copyArray(workingArray)); 
             child1 = ind * 2 + 1;
             if (child1 < heap_size){
                 [c1val, c1r, c1g, c1b] = workingArray[child1];
@@ -79,10 +82,11 @@ export function runHeapsort(originalArray){
         } else if(child1 < heap_size && ival < c1val){
             [workingArray[child1], workingArray[ind]] = [workingArray[ind], workingArray[child1]];            
         }
+        utils.colorIndex(workingArray, ind, utils.color3);        
         frames.push(utils.copyArray(workingArray));
     }
     utils.colorRange(workingArray, 0, workingArray.length - 1, utils.color5);
     frames.push(utils.copyArray(workingArray));
-    var legend = [["Heapsort Legend", utils.color5], ["In-place max heap", utils.color3], ["Element being added to max heap", utils.color1], ["Sorted elements", utils.color2]]
+    var legend = [["Heapsort Legend", utils.color5], ["In-place max heap", utils.color3], ["Element being sifted", utils.color1], ["Sorted elements", utils.color2]]
     return [frames, legend];
 }

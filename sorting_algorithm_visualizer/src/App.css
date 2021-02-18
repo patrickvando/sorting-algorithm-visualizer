@@ -1,7 +1,18 @@
 .App {
+  min-width: 1280px;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: "Roboto Mono", monospace;
 }
 
+canvas {
+  border: black 1px solid;
+}
+
+/*
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -35,17 +46,14 @@
   to {
     transform: rotate(360deg);
   }
-}
+}*/
 
-.algorithm-button {
-}
-
-.selected-algorithm-button {
-  color: red;
+.btn {
+  margin: 3px 3px 3px 3px;
 }
 
 .custom-value-criteria {
-white-space: pre-wrap;
+  white-space: pre-wrap;
 }
 
 .invalid-custom-value-submission {
@@ -56,12 +64,47 @@ white-space: pre-wrap;
   width: 500px;
 }
 
-/*body {
-    min-width: 1280px;
-}*/
+.speed {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
 
-.select-row {
-    display: flex;
-    flex-flow: row nowrap;
-    justify-content: space-evenly;
+.speed-label {
+  margin: 0px 12px 0px 0px;
+}
+.playback-bar {
+  display: flex;
+  flex-direction: row;
+  align-items: right;
+  justify-content: space-around;
+  margin: 3px 0px 3px 0px;
+}
+
+.custom-value-submission-label {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin: 3px 0px 3px 0px;
+}
+
+.frame-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.frame-slider-label {
+  white-space: pre-wrap;
+}
+
+.Description {
+  margin: 10px 0px 10px 0px;
+}
+
+.description-block {
+  width: 1100px;
+  margin-right: auto;
+  margin-left: auto;
 }

@@ -4,6 +4,8 @@ const color3 = "#0000FF";
 const color4 = "#8B4513";
 const color5 = "#000000";
 const color6 = "#FFFFFF";
+const color7 = "#010101";
+const color8 = "#800080";
 
 export function copyArray(arr){
     if(!Array.isArray(arr)){
@@ -27,4 +29,4 @@ export function colorRange(arr, start, end, color){
     }
 }
 
-export {color1, color2, color3, color4, color5, color6};
+export {color1, color2, color3, color4, color5, color6, color7, color8};
