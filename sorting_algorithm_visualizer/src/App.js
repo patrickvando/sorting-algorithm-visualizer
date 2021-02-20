@@ -20,7 +20,7 @@ import {
 } from "@material-ui/icons";
 
 const algorithmOptions = [
-  ["Quicksort", runQuicksort, "Quicksort Description"],
+  ["Quicksort", runQuicksort, "Quicksort description"],
   ["Mergesort", runMergesort, "Mergesort Description"],
   ["Heapsort", runHeapsort, "Heapsort Description"],
   ["Insertion sort", runInsertionsort, "Insertionsort Description"],
@@ -68,22 +68,15 @@ function AlgorithmSelect(props) {
 }
 
 function Description(props) {
-  let currentAlgorithmName, currentAlgorithmRunner, currentAlgorithmDescription;
-  [
-    currentAlgorithmName,
-    currentAlgorithmRunner,
-    currentAlgorithmDescription,
-  ] = props.currentAlgorithm;
   return (
     <div className="Description">
       <div className="description-block">
         Use this visualizer to compare different sorts. Each "frame" of the
         visualization corresponds to a single swap between two elements. Try
-        comparing the "efficient sorts" (Quicksort, Mergesort, and Heapsort) to
-        the others!
+        customizing the values!
       </div>
       <br />
-      <div>{currentAlgorithmDescription}</div>
+      <div>{props.description}</div>
     </div>
   );
 }
@@ -335,6 +328,9 @@ class Controls extends React.Component {
           customValues={this.state.customValues}
           handleCustomValuesChange={this.handleCustomValuesChange}
           changeStartingArray={this.props.changeStartingArray}
+          maxVal={this.props.maxVal}
+          minVal={this.props.minVal}
+          maxLength={this.props.maxLength}
         />
       </div>
     );
@@ -364,22 +360,28 @@ class ValueCustomizer extends React.Component {
   }
 
   validateCustomValues(customValues) {
-    const regex = /^(\s*[0-9]+\s*,)*(\s*[0-9]+\s*)?$/;
+    let regex = /^(\s*[0-9]+\s*,)*(\s*[0-9]+\s*)?$/g;
     if (customValues.match(regex) == null) {
       return false;
     }
+    regex = /[0-9]+/g;
     let values = customValues.match(regex).map((value) => parseInt(value));
-    if (Math.max(...values) > 100 || Math.min(...values) < 0) {
+    if (
+      Math.max(...values) > 100 ||
+      Math.min(...values) < 0 ||
+      values.length >= this.props.maxLength
+    ) {
       return false;
     }
     return true;
   }
 
   handleCustomValuesSubmission(event) {
+    let customValues = this.props.customValues;
     event.preventDefault();
-    if (this.validateCustomValues(this.props.customValues)) {
+    if (this.validateCustomValues(customValues)) {
       this.props.changeStartingArray(
-        this.customValuesToStartingArray(this.props.customValues)
+        this.customValuesToStartingArray(customValues)
       );
       this.setState({ validCustomValueSubmission: true });
     } else {
@@ -396,10 +398,15 @@ class ValueCustomizer extends React.Component {
             : "invalid-custom-value-submission"
         }
       >
-        Custom values must be integers greater than or equal to 0 and less than
-        100.
+        {"Custom values must be integers greater than or equal to " +
+          this.props.minVal +
+          " and less than " +
+          this.props.maxVal +
+          "."}
         <br />
-        Separate values using commas. Maximum length of 50 values.
+        {"Separate values using commas. Maximum length of " +
+          this.props.maxLength +
+          " values."}
       </span>
     );
     return (
@@ -438,8 +445,8 @@ class Visualizer extends React.Component {
       defaultAlgorithmName,
       defaultAlgorithmRunner,
     ] = this.props.defaultAlgorithm;
-    let frames, legend;
-    [frames, legend] = defaultAlgorithmRunner(startingArray);
+    let frames, legend, description;
+    [frames, legend, description] = defaultAlgorithmRunner(startingArray);
     this.state = {
       startingArray: startingArray,
       isPaused: true,
@@ -448,6 +455,7 @@ class Visualizer extends React.Component {
       frameIndex: 0,
       animationSpeed: this.props.baseAnimationSpeed,
       currentAlgorithm: this.props.defaultAlgorithm,
+      description: description,
     };
     this.canvasRef = React.createRef();
     this.animationInterval = null;
@@ -471,10 +479,16 @@ class Visualizer extends React.Component {
     this.setState((state) => {
       let algorithmName, algorithmRunner;
       [algorithmName, algorithmRunner] = state.currentAlgorithm;
-      let frames, legend;
-      [frames, legend] = algorithmRunner(state.startingArray);
+      let frames, legend, description;
+      [frames, legend, description] = algorithmRunner(state.startingArray);
       clearInterval(this.animationInterval);
-      return { legend: legend, frames: frames, frameIndex: 0, isPaused: true };
+      return {
+        legend: legend,
+        frames: frames,
+        description: description,
+        frameIndex: 0,
+        isPaused: true,
+      };
     });
   }
 
@@ -487,9 +501,8 @@ class Visualizer extends React.Component {
     if (shouldPause == isPaused) {
       return;
     }
-    if (shouldPause) {
-      clearInterval(this.animationInterval);
-    } else {
+    clearInterval(this.animationInterval);    
+    if (!shouldPause) {
       this.animationInterval = setInterval(
         () => this.changeFrame(this.state.frameIndex + 1),
         this.state.animationSpeed
@@ -507,7 +520,7 @@ class Visualizer extends React.Component {
   }
 
   changeAnimationSpeed(speed) {
-    if (this.animationInterval) {
+    if (!this.state.isPaused) {
       clearInterval(this.animationInterval);
       this.animationInterval = setInterval(
         () => this.changeFrame(this.state.frameIndex + 1),
@@ -532,7 +545,7 @@ class Visualizer extends React.Component {
           runAlgorithm={this.runAlgorithm}
           changeAlgorithm={this.changeAlgorithm}
         />
-        <Description currentAlgorithm={this.state.currentAlgorithm} />
+        <Description description={this.state.description} />
         <Display
           canvasRef={this.canvasRef}
           width={1200}
@@ -556,6 +569,9 @@ class Visualizer extends React.Component {
           changeAnimationSpeed={this.changeAnimationSpeed}
           startingArray={this.state.startingArray}
           changeStartingArray={this.changeStartingArray}
+          maxVal={this.props.maximum}
+          minVal={this.props.minimum}
+          maxLength={this.props.maxLength}
         />
       </div>
     );
@@ -569,9 +585,10 @@ function App() {
         <b>Sort Visualizer</b>
       </span>
       <Visualizer
-        arrayLength={50}
-        minimum={10}
-        maximum={50}
+        arrayLength={40}
+        minimum={0}
+        maximum={100}
+        maxLength={50}
         baseAnimationSpeed={100}
         algorithmOptions={algorithmOptions}
         defaultAlgorithm={algorithmOptions[0]}

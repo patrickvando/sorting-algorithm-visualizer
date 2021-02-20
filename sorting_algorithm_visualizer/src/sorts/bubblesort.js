@@ -1,12 +1,12 @@
-import * as utils from '../utilities.js';
+import * as utils from "../utilities.js";
 
-export function runBubblesort(originalArray){
+export function runBubblesort(originalArray) {
     var workingArray = utils.copyArray(originalArray);
     var frames = [utils.copyArray(workingArray)];
     var run = true;
-    while(run){
+    while (run) {
         var swaps = 0;
-        for(var k = 1; k < workingArray.length; k++){
+        for (var k = 1; k < workingArray.length; k++) {
             var kval, kr, kg, kb;
             [kval, kr, kg, kb] = workingArray[k];
             var pval, pr, pg, pb;
@@ -14,22 +14,38 @@ export function runBubblesort(originalArray){
             utils.colorIndex(workingArray, k, utils.color1);
             utils.colorIndex(workingArray, k - 1, utils.color3);
             frames.push(utils.copyArray(workingArray));
-            if(kval < pval){
-                [workingArray[k], workingArray[k - 1]] = [workingArray[k - 1], workingArray[k]];
+            if (kval < pval) {
+                [workingArray[k], workingArray[k - 1]] = [
+                    workingArray[k - 1],
+                    workingArray[k],
+                ];
                 utils.colorIndex(workingArray, k, utils.color3);
                 utils.colorIndex(workingArray, k - 1, utils.color1);
                 frames.push(utils.copyArray(workingArray));
-                swaps += 1;               
+                swaps += 1;
             }
             utils.colorIndex(workingArray, k, utils.color5);
             utils.colorIndex(workingArray, k - 1, utils.color5);
         }
-        if(swaps == 0){
+        if (swaps == 0) {
             run = false;
         }
     }
     utils.colorRange(workingArray, 0, workingArray.length - 1, utils.color5);
-    frames.push(utils.copyArray(workingArray)); 
-    var legend = [["Bubblesort Legend", utils.color5], ["Left element", utils.color3], ["Right element", utils.color1]];   
-    return [frames, legend];
+    frames.push(utils.copyArray(workingArray));
+    var legend = [
+        ["Bubblesort Legend", utils.color5],
+        ["Left element", utils.color3],
+        ["Right element", utils.color1],
+    ];
+    var description = (
+        <span>
+            <b>Bubble sort</b> is an inefficient sorting algorithm with an
+            runtime of O(n^2). <br />
+            <a href="https://en.wikipedia.org/wiki/Bubble_sort">
+                Learn about how Bubble sort works on Wikipedia.
+            </a>
+        </span>
+    );
+    return [frames, legend, description];
 }

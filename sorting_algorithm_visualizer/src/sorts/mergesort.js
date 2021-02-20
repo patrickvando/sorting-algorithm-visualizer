@@ -49,6 +49,13 @@ export function runMergesort(originalArray){
         }
     }
     mergesort(0, workingArray.length - 1);
+    var description = (
+        <span>
+            <b>Mergesort</b> is an efficient stable sorting algorithm with a
+            runtime of O(n log n) and a memory requirement of O(n). 
+            <br /><a href="https://en.wikipedia.org/wiki/Merge_sort">Learn about how Mergesort works on Wikipedia.</a>
+        </span>
+    );    
     var legend = [["Mergesort Legend", utils.color5], ["Left in-order partition", utils.color1], ["Right in-order partition", utils.color3], ["Merged in-order partition", utils.color2]];
-    return [frames, legend];
+    return [frames, legend, description];
 }

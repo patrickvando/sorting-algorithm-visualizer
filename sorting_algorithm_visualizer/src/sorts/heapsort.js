@@ -87,6 +87,13 @@ export function runHeapsort(originalArray){
     }
     utils.colorRange(workingArray, 0, workingArray.length - 1, utils.color5);
     frames.push(utils.copyArray(workingArray));
+    var description = (
+        <span>
+            <b>Heapsort</b> is an efficient in-place sorting algorithm with a
+            runtime of O(n log n). 
+            <br /><a href="https://en.wikipedia.org/wiki/Heapsort">Learn about how Heapsort works on Wikipedia.</a>
+        </span>
+    );        
     var legend = [["Heapsort Legend", utils.color5], ["In-place max heap", utils.color3], ["Element being sifted", utils.color1], ["Sorted elements", utils.color2]]
-    return [frames, legend];
+    return [frames, legend, description];
 }
