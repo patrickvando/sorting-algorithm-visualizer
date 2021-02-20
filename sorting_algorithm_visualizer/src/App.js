@@ -70,12 +70,6 @@ function AlgorithmSelect(props) {
 function Description(props) {
   return (
     <div className="Description">
-      <div className="description-block">
-        Use this visualizer to compare different sorts. Each "frame" of the
-        visualization corresponds to a single swap between two elements. Try
-        customizing the values!
-      </div>
-      <br />
       <div>{props.description}</div>
     </div>
   );
@@ -501,7 +495,7 @@ class Visualizer extends React.Component {
     if (shouldPause == isPaused) {
       return;
     }
-    clearInterval(this.animationInterval);    
+    clearInterval(this.animationInterval);
     if (!shouldPause) {
       this.animationInterval = setInterval(
         () => this.changeFrame(this.state.frameIndex + 1),
@@ -593,6 +587,13 @@ function App() {
         algorithmOptions={algorithmOptions}
         defaultAlgorithm={algorithmOptions[0]}
       />
+      <br />
+      <br />
+      <div className="description-block">
+        Use this visualizer to compare different sorts. Each "frame" of the
+        visualization corresponds to a single swap between two elements. Try
+        customizing the values!
+      </div>
     </div>
   );
 }
