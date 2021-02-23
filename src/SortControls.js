@@ -151,7 +151,6 @@ class Controls extends React.Component {
                 <FastForward />
               </button>
             </div>
-            <form>
               <label className="speed">
                 <span className="speed-label">Speed:</span>
                 <input
@@ -163,7 +162,6 @@ class Controls extends React.Component {
                   onChange={this.handleSpeedSliderChange}
                 />
               </label>
-            </form>
           </div>
         </div>
         <ValueCustomizer
