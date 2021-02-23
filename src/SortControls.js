@@ -17,9 +17,7 @@ input by the user.*/
 class Controls extends React.Component {
   constructor(props) {
     super(props);
-    let startingValues = this.seedArrayToCustomValues(
-      this.props.seedArray
-    );
+    let startingValues = this.seedArrayToCustomValues(this.props.seedArray);
     this.state = {
       speedModifier: 0,
       customValues: startingValues,
@@ -100,14 +98,10 @@ class Controls extends React.Component {
             <button
               className="btn btn-outline-dark"
               onClick={() => {
-                let randomizedArray = this.randomizeArray(
-                  this.props.seedArray
-                );
+                let randomizedArray = this.randomizeArray(this.props.seedArray);
                 this.props.changeseedArray(randomizedArray);
                 this.setState({
-                  customValues: this.seedArrayToCustomValues(
-                    randomizedArray
-                  ),
+                  customValues: this.seedArrayToCustomValues(randomizedArray),
                 });
               }}
             >
@@ -151,17 +145,17 @@ class Controls extends React.Component {
                 <FastForward />
               </button>
             </div>
-              <label className="speed">
-                <span className="speed-label">Speed:</span>
-                <input
-                  className="speed-slider"
-                  type="range"
-                  min={-10}
-                  max={10}
-                  value={this.state.speedModifier}
-                  onChange={this.handleSpeedSliderChange}
-                />
-              </label>
+            <label className="speed">
+              <span className="speed-label">Speed:</span>
+              <input
+                className="speed-slider"
+                type="range"
+                min={-10}
+                max={10}
+                value={this.state.speedModifier}
+                onChange={this.handleSpeedSliderChange}
+              />
+            </label>
           </div>
         </div>
         <ValueCustomizer
@@ -220,9 +214,7 @@ class ValueCustomizer extends React.Component {
     let customValues = this.props.customValues;
     event.preventDefault();
     if (this.validateCustomValues(customValues)) {
-      this.props.changeseedArray(
-        this.customValuesToseedArray(customValues)
-      );
+      this.props.changeseedArray(this.customValuesToseedArray(customValues));
       this.setState({ validCustomValueSubmission: true });
     } else {
       this.setState({ validCustomValueSubmission: false });
